@@ -1,0 +1,34 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% load price_tags %}
+{% block content %}
+
+<div class="goods">
+              <h2 class="title-56" class="goods__title" >{{post.firm}} {{post.mark}} {{post.year}} </h2>
+              <img src="{{post.photo.url}}" alt="eror" class="goods__img">
+              <div class="goods__icons">
+                <div class="goods__subcontainer">
+                  <img src="{% static 'shop/icons/pump.png' %}" alt="" class="goods__icon">
+                  <div class="goods__icon-text">{{post.fuel}}</div>
+                </div>
+                <div class="goods__subcontainer">
+                <img src="{% static 'shop/icons/engeer.png' %}" alt="" class="goods__icon">
+                <div class="goods__icon-text">{{post.power}} к.с.</div>
+              </div>
+                <div class="goods__subcontainer">
+                <img src="{% static 'shop/icons/aftomat.png' %}" alt="" class="goods__icon">
+                <div class="goods__icon-text">{{post.transmission}}</div>
+              </div>
+                <div class="goods__subcontainer">
+                <img src="{% static 'shop/icons/distance.png' %}" alt="" class="goods__icon">
+                <div class="goods__icon-text">{{post.distance|dist}}</div>
+              </div>
+              </div>
+              <div class="title-48 title-48__price goods__price">{{post.price|priceedit}} $</div>
+              <div class="goods__descr">{{post.content}}</div>
+              <div class="goods__shop">{{post.shops}}</div>
+              <img src="{{post.shops.photo.url}}" alt="" class="goods__shop__img">
+              <div class="goods__descr">{{post.shops.content}}</div>
+</div>
+
+{% endblock %}

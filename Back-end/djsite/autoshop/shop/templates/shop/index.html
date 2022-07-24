@@ -1,0 +1,43 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% load price_tags %}
+{% block content %}
+<h1 class="title-96">Каталог автомобілів</h1>
+
+{% for p in posts %}
+  <div class="complect">
+    <div class="product">
+      <a href="{{ p.get_absolute_url }}">
+        <div class="product__img" style="background: url('{{p.photo.url}}') 100%/cover "></div>
+      </a>
+      <div class="product__content">
+        <a href="{{ p.get_absolute_url }}" class="product__title title-56">{{p.firm}} {{p.mark}} {{p.year}} </a>
+        <div class="product__price title-48 title-48__price">{{p.price|priceedit}} $</div>
+        <div class="product__icons">
+          <div class="product__subcontainer">
+            <img src="{% static 'shop/icons/pump.png' %}" alt="" class="product__icon">
+            <div class="product__icon-text">{{p.fuel}}</div>
+          </div>
+          <div class="product__subcontainer">
+          <img src="{% static 'shop/icons/engeer.png' %}" alt="" class="product__icon">
+          <div class="product__icon-text">{{p.power}} к.с.</div>
+        </div>
+          <div class="product__subcontainer">
+          <img src="{% static 'shop/icons/aftomat.png' %}" alt="" class="product__icon">
+          <div class="product__icon-text">{{p.transmission}}</div>
+        </div>
+          <div class="product__subcontainer">
+          <img src="{% static 'shop/icons/distance.png' %}" alt="" class="product__icon">
+          <div class="product__icon-text">{{p.distance|dist}}</div>
+        </div>
+        </div>
+        <div class="product__descr">{% autoescape on %}
+	{{p.content|linebreaks|truncatewords:30}}
+	{% endautoescape %}</div>
+      </div>
+    </div>
+    <br>
+    <hr>
+  </div>
+{% endfor %}
+{% endblock %}

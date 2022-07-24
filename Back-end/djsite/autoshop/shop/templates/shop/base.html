@@ -1,0 +1,281 @@
+{% load static %}
+{% load price_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+        <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width,initial-scale=1">
+                <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+                <link rel="preconnect" href="https://fonts.googleapis.com">
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap"
+                rel="stylesheet">
+                <link type="text/css" rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+                <title>
+                        AutoShop
+                </title>
+        </head>
+
+        <body>
+                <header class="header">
+                        <a href="{% url 'home' %}"><img class="header__logocar" src="{% static 'shop/img/header/logocar.png' %}" alt="logocar"></a>
+                        <a href="{% url 'home' %}" class="header__logo"><img class="header__logo" src="{% static 'shop/img/header/logo.png' %}" alt="logo"></a>
+                        <ul class="header__mainmenu">
+                                {% if request.user.is_authenticated %}
+                                        <li class="header__links"><a href="{% url 'add_page' %}">Добав. авто</a>  | <a href="{% url 'logout' %}">Выйти</a></li>
+                                {% else %}
+                                        <li class="header__links"><a href="{% url 'register' %}">Реєстрація</a> | <a href="{% url 'login' %}">Войти</a></li>
+                                {% endif %}
+                        </ul>
+                </header>
+                <section class="main">
+                        <aside class="sidebar">
+                                <form action="{% url 'filter' %}" method="get">
+                                <div>
+                                        <div class="title-48 title-48__sidebar">Стан</div>
+                                        {% for condition in view.get_condition %}
+                                        <label class="container">
+                                                <span class="">{{ condition }}</span>
+                                                <input type="checkbox" name="condition" value="{{ condition }}">
+                                                <span class="checkmark"></span>
+                                        </label>
+                                        {% endfor %}
+                                </div>
+
+                                <div class="sidebar__dropdowns sidebar__firm">
+                                        <div class="sidebar__dropdown__title title-48 title-48__sidebar">
+                                                Фірма
+                                        </div>
+                                        <div class="sidebar__dropdown">
+                                                <select name="firms">
+                                                        <option value="0">
+                                                                Вибрати фiрму
+                                                        </option>
+                                                        {% for firm in view.get_firm %}
+                                                        <option value="{{ firm }}" id="firmid">
+                                                                {{ firm }}
+                                                        </option>
+                                                        {% endfor %}
+                                                </select>
+                                        </div>
+                                </div>
+                                <div class="sidebar__dropdowns sidebar__marks">
+                                        <div class="sidebar__dropdown__title title-48 title-48__sidebar">
+                                                Марка
+                                        </div>
+                                        <div class="sidebar__dropdown">
+                                                <select name="marks">
+                                                        <option value="0">
+                                                                Вибрати марку
+                                                        </option>
+                                                        {% for mark in view.get_mark %}
+                                                        <option value="{{ mark }}" id="mark">
+                                                                {{ mark}}
+                                                        </option>
+                                                        {% endfor %}
+                                                </select>
+                                        </div>
+                                </div>
+
+                                <div class="sidebar__years">
+                                        <div class="sidebar__years title-48 title-48__sidebar">Рік</div>
+                                        {% for year in view.get_years %}
+                                        <label class="container">
+                                                <span class="sidebar__years__checkbox">{{ year }}</span>
+                                                <input type="checkbox" name="year" value="{{ year }}">
+                                                <span class="checkmark"></span>
+                                        </label>
+                                        {% endfor %}
+<!--                                        <label class="container">
+                                                <span class="sidebar__years__checkbox">2015</span>
+                                                <input type="checkbox">
+                                                <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container">
+                                                <span class="sidebar__years__checkbox">2020</span>
+                                                <input type="checkbox">
+                                                <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container">
+                                                <span class="sidebar__years__checkbox">2021</span>
+                                                <input type="checkbox">
+                                                <span class="checkmark"></span>
+                                        </label> -->
+
+                                </div>
+
+                                <div class="sidebar__transmission">
+                                        <div class="sidebar__transmission title-48 title-48__sidebar">
+                                                Коробка
+                                        </div>
+                                        <label class="container">
+                                                <span class="sidebar__transmission__checkbox">
+                                                        Автомат
+                                                </span>
+                                                <input type="checkbox" name="transmission" value="Автомат">
+                                                <span class="checkmark">
+                                                </span>
+                                        </label>
+                                        <label class="container">
+                                                <span class="sidebar__transmission__checkbox">
+                                                        Механіка
+                                                </span>
+                                                <input type="checkbox" name="transmission" value="Механiка">
+                                                <span class="checkmark">
+                                                </span>
+                                        </label>
+                                        <label class="container">
+                                                <span class="sidebar__transmission__checkbox">
+                                                        Варіатор
+                                                </span>
+                                                <input type="checkbox" name="transmission" value="Варiатор">
+                                                <span class="checkmark">
+                                                </span>
+                                        </label>
+                                </div>
+                                <div class="sidebar__dropdowns sidebar__power">
+                                        <div class="sidebar__dropdown__title title-48 title-48__sidebar">
+                                               Потужність дв.
+                                        </div>
+                                       <div class="sidebar__inputs">
+                                                <input class="sidebar__input" placeholder="від" type="number"
+                                                name="powerfrom">
+                                                <input class="sidebar__input" placeholder="до" type="number"
+                                                name="powerto">
+                                        </div>
+                                </div>
+                                <div class="sidebar__engeer">
+                                        <div class="sidebar__engeer title-48 title-48__sidebar">
+                                                Паливо
+                                        </div>
+                                        <label class="container">
+                                                <span class="sidebar__engeer_checkbox">
+                                                       Бензин
+                                                </span>
+                                                <input type="checkbox" name="engeer" value="Бензин">
+                                                <span class="checkmark">
+                                                </span>
+                                        </label>
+                                        <label class="container">
+                                                <span class="sidebar__engeer__checkbox">
+                                                        Дизель
+                                                </span>
+                                                <input type="checkbox" name="engeer" value="Дизель">
+                                                <span class="checkmark">
+                                                </span>
+                                        </label>
+                                        <label class="container">
+                                                <span class="sidebar__engeer_checkbox">
+                                                        Газ
+                                                </span>
+                                                <input type="checkbox" name="engeer" value="Газ">
+                                                <span class="checkmark">
+                                                </span>
+                                        </label>
+                                        <label class="container">
+                                                <span class="sidebar__engeer_checkbox">
+                                                        Електро
+                                                </span>
+                                                <input type="checkbox" name="engeer" value="Електро">
+                                                <span class="checkmark">
+                                                </span>
+                                        </label>
+                                </div>
+                                <div class="sidebar__distance">
+                                        <div class="sidebar__distance title-48 title-48__sidebar">
+                                                Пробіг (тис. км)
+                                        </div>
+                                        <div class="sidebar__inputs">
+                                                <input class="sidebar__input" placeholder="від" type="number"
+                                                name="distancefrom">
+                                                <input class="sidebar__input" placeholder="до" type="number"
+                                                name="distanceto">
+                                        </div>
+                                </div>
+                                <div class="sidebar__distance">
+                                        <div class="sidebar__distance title-48 title-48__sidebar">
+                                                Ціна $
+                                        </div>
+                                        <div class="sidebar__inputs">
+                                                <input class="sidebar__input" placeholder="від" type="number"
+                                                name="pricefrom">
+                                                <input class="sidebar__input" placeholder="до" type="number"
+                                                name="priceto">
+                                        </div>
+                                </div>
+                                <button class="sidebar__btn" type="submit">Пошук</button>
+                                </form>
+
+                        </aside>
+                        <div class="contents">
+                                <div class="main-container">
+                                       {% block content %}
+                                       {% endblock content %}
+                                        {% if page_obj.has_other_pages %}
+                                        <nav class="list-pages">
+                                            <ul>
+                                        {% if page_obj.has_previous %}
+                                        <li class="page-num">
+                                            <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+                                        </li>
+                                        {% endif %}
+
+                                                {% for p in paginator.page_range %}
+                                                {% if page_obj.number == p %}
+                                                <li class="page-num page-num-selected">{{ p }}</li>
+                                                {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2  %}
+                                                <li class="page-num">
+                                                    <a href="?page={{ p }}">{{ p }}</a>
+                                                </li>
+                                                {% endif %}
+                                                {% endfor %}
+
+                                        {% if page_obj.has_next %}
+                                        <li class="page-num">
+                                            <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+                                        </li>
+                                        {% endif %}
+
+                                            </ul>
+                                        </nav>
+                                        {% endif %}
+                                </div>
+                        </div>
+                </section>
+
+                <footer class="footer" id="footer">
+                        <div class="footer__descr">
+                                Цей сайт був зробленний студентом ІТУ-21-3 Линником Богданом для курсової
+                                роботи з ООП 2022 року
+                        </div>
+                        <div class="footer__socialblocks">
+                                <div class="footer__socialblock">
+                                        <a href="https://www.instagram.com/bodyaln/" class="footer__socialblock__link"><img src="{% static 'shop/icons/socialmedia/facebook-40.png' %}" alt="facebook"></a>
+                                </div>
+                                <div class="footer__socialblock">
+                                        <a href="https://twitter.com/bodyaln" class="footer__socialblock__link"><img src="{% static 'shop/icons/socialmedia/twitter-40.png' %}" alt="twitter"></a>
+                                </div>
+                                <div class="footer__socialblock">
+                                        <a href="https://www.instagram.com/bodyaln/" class="footer__socialblock__link"><img src="{% static 'shop/icons/socialmedia/instagram-40.png' %}" alt="instagramm"></a>
+                                </div>
+                                <div class="footer__socialblock">
+                                        <a href="https://twitter.com/bodyaln" class="footer__socialblock__link"><img src="{% static 'shop/icons/socialmedia/linkedin-40.png' %}" alt="Linkid"></a>
+                                </div>
+                        </div>
+                </footer>
+<!--        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
+<!--        <script>-->
+<!--            $("#firmid").change(function () {-->
+<!--                const firmid = $(this).val();  // get the selected country ID from the HTML input-->
+<!--                console.log(firmid);-->
+<!--                $.ajax({                       // initialize an AJAX request-->
+<!--                    data: {-->
+<!--                        'firm_id': firmid-->
+<!--                    }-->
+<!--                });-->
+
+<!--            });-->
+<!--        </script>-->
+        </body></html>
